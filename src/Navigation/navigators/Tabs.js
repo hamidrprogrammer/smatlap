@@ -150,7 +150,7 @@ const Tabs = ({ params }) => {
     >
       <Tab.Screen
         name="Chant"
-        component={Discover}
+        component={ChantScreen}
         options={{cardStyleInterpolator: ({ current, layouts }) => {
             return {
               cardStyle: {
@@ -188,7 +188,7 @@ const Tabs = ({ params }) => {
       />
        <Tab.Screen
         name="Explore"
-        component={Discover}
+        component={VideoListComponent}
         options={{
           tabBarIcon: ({ focused, color, size }) => (
             <Image source={require('../../../assets/Group 778.png')}

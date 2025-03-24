@@ -1251,7 +1251,7 @@
                 </ImageBackground>
               </View>
             </Modal>
-            <MIC/>
+            {/* <MIC/> */}
           </Animated.View>
         );
       };

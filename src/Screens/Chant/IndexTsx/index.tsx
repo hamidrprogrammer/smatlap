@@ -92,6 +92,8 @@ export function ChantScreen({ navigation }) {
     setActive(true);
   }
   useEffect(() => {
+    console.log(chantAll);
+    
     if (chantContentOffline !== null) {
       if (chantContentOffline?.chant_Audio_List?.length > 0 && active) {
         navigation.navigate("ChantPlayer");
@@ -124,7 +126,7 @@ export function ChantScreen({ navigation }) {
       </ImageBackground>
      
       <FlatList
-        data={chantAll}
+        data={chantAll?.filter((items)=> {return items?.title != "hamiid"})}
         keyExtractor={(item) => item.id}
         renderItem={({ item, index }) => (
           <RenderItem item={item} index={index} onPress={()=>{

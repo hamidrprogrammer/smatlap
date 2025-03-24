@@ -8,8 +8,7 @@
       [
         "@config-plugins/react-native-webrtc",
         {
-          "cameraPermission": "$(PRODUCT_NAME) requires camera access in order to capture and transmit video",
-          "microphonePermission": "$(PRODUCT_NAME) requires microphone access in order to capture and transmit audio"
+          "cameraPermission": "$(PRODUCT_NAME) requires camera access in order to capture and transmit video"
         }
       ],
       [
@@ -23,12 +22,12 @@
       "expo-localization",
       "expo-router"
     ],
-    "version": "194.0.0",
+    "version": "220.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/appstore.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/appstore.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -36,24 +35,20 @@
       "**/*"
     ],
     "ios": {
-      "buildNumber": "21.79.0",
+      "buildNumber": "34.79.0",
       "usesAppleSignIn": true,
-      "supportsTablet": true,
-      "bundleIdentifier": "com.ios.clubnett",
+      "supportsTablet": false,
+      "bundleIdentifier": "Com.SmartClub.De",
       "infoPlist": {
         "CFBundleURLTypes": [
           {
             "CFBundleURLSchemes": [
               "com.googleusercontent.apps.276139328972-88dbtkhl617unm9mkcqt8un0ud58602p"
             ]
-          },
-          {
-            "CFBundleURLSchemes": [
-              "com.googleusercontent.apps.276139328972-88dbtkhl617unm9mkcqt8un0ud58602p"
-            ]
           }
         ],
-        "ITSAppUsesNonExemptEncryption": false
+        "ITSAppUsesNonExemptEncryption": false,
+        "NSCameraUsageDescription": "This app requires access to the camera to enable event lighting effects."
       },
       "config": {
         "googleSignIn": {
@@ -71,6 +66,7 @@
       "permissions": [
         "android.permission.CAMERA",
         "android.permission.RECORD_AUDIO",
+        "android.permission.FLASHLIGHT",
         "android.permission.BLUETOOTH",
         "android.permission.BLUETOOTH_CONNECT",
         "android.permission.BLUETOOTH_ADMIN",
