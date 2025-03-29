@@ -133,6 +133,10 @@ const EventContextProvider: React.FC<MyContextProviderProps> = ({
   }, []);
   async function fnSetUserID() {
     return getUser().then((res) => {
+      console.log("res==============>");
+
+      console.log(res);
+      
       if (res != null) {
         setUserID(res);
         return res;
@@ -721,6 +725,7 @@ const EventContextProvider: React.FC<MyContextProviderProps> = ({
   return (
     <EventContext.Provider
       value={{
+        userID,
         fetchTime,
         currentTime,
         fetchOnBoarding,

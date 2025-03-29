@@ -4,25 +4,9 @@
     "slug": "smartklab",
     "name": "SMARTKLAP",
     "plugins": [
-      "@stream-io/video-react-native-sdk",
-      [
-        "@config-plugins/react-native-webrtc",
-        {
-          "cameraPermission": "$(PRODUCT_NAME) requires camera access in order to capture and transmit video"
-        }
-      ],
-      [
-        "expo-camera",
-        {
-          "cameraPermission": "Allow $(PRODUCT_NAME) to access your camera."
-        }
-      ],
-      "expo-build-properties",
-      "expo-font",
-      "expo-localization",
-      "expo-router"
+      
     ],
-    "version": "220.0.0",
+    "version": "240.0.0",
     "orientation": "portrait",
     "icon": "./assets/appstore.png",
     "userInterfaceStyle": "light",
@@ -35,7 +19,7 @@
       "**/*"
     ],
     "ios": {
-      "buildNumber": "34.79.0",
+      "buildNumber": "37.79.0",
       "usesAppleSignIn": true,
       "supportsTablet": false,
       "bundleIdentifier": "Com.SmartClub.De",
@@ -48,7 +32,7 @@
           }
         ],
         "ITSAppUsesNonExemptEncryption": false,
-        "NSCameraUsageDescription": "This app requires access to the camera to enable event lighting effects."
+"NSCameraUsageDescription": "This app requires access to the camera to enable synchronized flashing light effects while music is playing."
       },
       "config": {
         "googleSignIn": {

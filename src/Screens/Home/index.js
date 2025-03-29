@@ -19,7 +19,13 @@ const Home = ({ navigation }) => {
         MCRN Expo Easy Starter
       </McText>
       <Button
-        onPress={() => {
+        onPress={async () => {
+          const token = await AsyncStorage.getItem('token');
+          if(token == null){
+            navigation.navigate("Onbordeing");
+
+            return;
+          }
           navigation.navigate('Profile');
         }}
         title="Go to Profile"

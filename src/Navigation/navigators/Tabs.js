@@ -15,11 +15,11 @@ import { EventContext } from "../../Servise/Events/eventContaxt";
 import SignalRContext from "../../Servise/Sinal/SignalRContext";
 import { LinearGradient } from "expo-linear-gradient";
 import { Colors } from "../../Constants";
-import { Image } from "react-native";
+import { Image ,Dimensions} from "react-native";
 import { Card } from "react-native-paper";
 import { CardStyleInterpolators } from "@react-navigation/stack";
 import { NullScreen } from "@/Screens/Home/NULL";
-
+const width = Dimensions.get("screen").width;
 const Tab = createBottomTabNavigator();
 const styles = StyleSheet.create({
   tabBarContainer: {
@@ -30,6 +30,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     backgroundColor: "#fff",
     margin: 10,
+    justifyContent:"space-around",
     borderRadius: 20,
     
   },
@@ -45,12 +46,12 @@ const CustomTabBar = ({ state, descriptors, navigation }) => {
   const onPressHome = () => {
     const event = navigation.emit({
       type: "tabPress",
-      target: state.routes[2].key,
+      target: state.routes[1].key,
       canPreventDefault: true,
     });
 
     if (!event.defaultPrevented) {
-      navigation.navigate(state.routes[2].name);
+      navigation.navigate(state.routes[1].name);
     }
   };
   return (
@@ -76,7 +77,14 @@ const CustomTabBar = ({ state, descriptors, navigation }) => {
           const isFocused = state.index === index;
 
           const icon = options.tabBarIcon;
-          const onPress = () => {
+          const onPress = async () => {
+             const token = await AsyncStorage.getItem('token');
+                
+            if(route.name =="Standings"&& token == null){
+              navigation.navigate("Onbordeing");
+
+              return;
+            }
             const event = navigation.emit({
               type: "tabPress",
               target: route.key,
@@ -119,7 +127,8 @@ const CustomTabBar = ({ state, descriptors, navigation }) => {
       </LinearGradient>
       <TouchableOpacity
        onPress={onPressHome}
-    style={{position:"absolute",alignSelf:"center"
+    style={{position:"absolute",alignSelf:"center",
+      left:width/2.5
     ,bottom:20}}>
       <View style={{borderRadius:25,backgroundColor:Colors.platform.android.primary,
         width:55,height:55,
@@ -151,34 +160,8 @@ const Tabs = ({ params }) => {
       <Tab.Screen
         name="Chant"
         component={ChantScreen}
-        options={{cardStyleInterpolator: ({ current, layouts }) => {
-            return {
-              cardStyle: {
-                transform: [
-                  {
-                    translateX: current.progress.interpolate({
-                      inputRange: [0, 1],
-                      outputRange: [layouts.screen.width, 0],
-                    }),
-                  },
-                ],
-              },
-            };
-          },
-          transitionSpec: {
-            open: {
-              animation: 'timing',
-              config: {
-                duration: 500,
-              },
-            },
-            close: {
-              animation: 'timing',
-              config: {
-                duration: 500,
-              },
-            },
-          },
+        options={{
+              
           tabBarIcon: ({ focused, color, size }) => (
             <Image source={require('../../../assets/Group 768.png')}
             style={{width:18,height:18,tintColor:color}} />
@@ -186,19 +169,7 @@ const Tabs = ({ params }) => {
           headerShown: false,
         }}
       />
-       <Tab.Screen
-        name="Explore"
-        component={VideoListComponent}
-        options={{
-          tabBarIcon: ({ focused, color, size }) => (
-            <Image source={require('../../../assets/Group 778.png')}
-            style={{width:18,height:18,tintColor:color}} 
-            resizeMode="contain"/>
-          ),
-          headerShown: false,
-        }}
-      />
-     
+      
       <Tab.Screen
         name="Discover"
         component={Discover}

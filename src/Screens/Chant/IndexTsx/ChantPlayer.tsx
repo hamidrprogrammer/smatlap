@@ -130,7 +130,7 @@ export default function LyricsPage({navigation}) {
         playsInSilentModeIOS: true,
         interruptionModeIOS: InterruptionModeIOS.DoNotMix,
         shouldDuckAndroid: true,
-        staysActiveInBackground: true,
+        staysActiveInBackground: false,
         playThroughEarpieceAndroid: true,
       });
       const audioUrl = chantContent?.chant_Audio_List[0]?.fileUrl.replace(/^https:/, 'http:');

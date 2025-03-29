@@ -155,7 +155,10 @@ const VideoListComponent = ({ navigation }) => {
           <View style={{ position: "absolute", left: `49%` }}>
             <McText medium size={15} numberOfLines={2} style={{ color: "#000" }}>{"Videos"}</McText>
           </View>
-          <Button mode="contained-tonal" textColor="#fff" contentStyle={{ borderRadius: 15 }} style={{ marginTop: 10, width: 100, alignSelf: "center", backgroundColor: Colors.platform.android.primary, borderRadius: 15 }} onPress={() => { pickVideo() }}>Upload</Button>
+          <Button mode="contained-tonal" textColor="#fff"
+           contentStyle={{ borderRadius: 15 }} 
+           style={{ marginTop: 10, width: 100, alignSelf: "center",
+            backgroundColor: Colors.platform.android.primary, borderRadius: 15 }} onPress={() => { pickVideo() }}>Upload</Button>
         </View>
       </Card>
 

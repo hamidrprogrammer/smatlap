@@ -200,6 +200,7 @@ export default function LyricsPageTest({ navigation, route }) {
           playsInSilentModeIOS: true,
           interruptionModeIOS: InterruptionModeIOS.DoNotMix,
           shouldDuckAndroid: false,
+          
           staysActiveInBackground: false,
           playThroughEarpieceAndroid: true,
         });

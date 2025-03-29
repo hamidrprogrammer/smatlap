@@ -23,7 +23,7 @@ export default function App() {
     async function loadFonts() {
       try {
         await Font.loadAsync({
-          'Poppins-Black': require('./assets/fonts/Poppins-Black.ttf'),
+          'Poppins-Black': require('./assets/fonts/OpenSans-Light.ttf'),
         });
         setFontsLoaded(true);
       } catch (error) {

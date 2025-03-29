@@ -1,5 +1,5 @@
 import React, {useCallback, useContext, useEffect, useState} from 'react';
-import {Platform, Linking, View, TouchableOpacity} from 'react-native';
+import {Platform, Linking, View, TouchableOpacity, StyleSheet} from 'react-native';
 import {Ionicons} from '@expo/vector-icons';
 import IconA from "react-native-vector-icons/AntDesign";
 import { StackActions, useNavigation } from "@react-navigation/native";
@@ -15,13 +15,15 @@ import { removeAllDataFromAsyncStorage } from '../../core/save';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Button } from 'react-native';
 import { ImageBackground } from 'react-native';
+import { AthContext, AthContextProvider } from '@/Servise/Ath/athContaxt';
+import Service from "../../Servise/api";
 
 const isAndroid = Platform.OS === 'android';
 
 const Profile = ({navigation}) => {
-  const {user} = useData();
+  const {user} = useContext(AthContext);
   const {assets, colors, sizes} = useTheme();
-  const {fetchGetUserRank,dataUserRank,dataUser} = useContext(EventContext)
+  const {fetchGetUserRank,dataUserRank,dataUser,userID} = useContext(EventContext)
   const IMAGE_SIZE = (sizes.width - (sizes.padding + sizes.sm) * 2) / 3;
   const IMAGE_VERTICAL_SIZE =
     (sizes.width - (sizes.padding + sizes.sm) * 2) / 2;
@@ -37,11 +39,30 @@ const Profile = ({navigation}) => {
   }, [])
   useEffect(() => {
     
-  
+    console.log("user=======================");
+     console.log(dataUser);
      
      
      
-  }, [dataUserRank])
+  }, [])
+  const deleteAccount = async (userId) => {
+    try {
+        const response = await Service.api.post(
+            '/DeleteAccount',
+            null, // No request body is needed for this API
+            {
+                params: { userId },
+              
+            }
+        );
+
+        return response.data; // Handle the API response
+    } catch (error) {
+        console.error('Error deleting account:', error.response?.data || error.message);
+        return { status: 0, message: 'Failed to delete account' };
+    }
+};
+
   const handleSocialLink = useCallback(
     (type: 'twitter' | 'dribbble') => {
       const url =
@@ -195,102 +216,202 @@ const Profile = ({navigation}) => {
               }, 2000);
               setLogoutVisible(false);
   }
+  const [deleteVisible, setDeleteVisible] = useState(false);
+  const showDeleteDialog = () => setDeleteVisible(true);
+  const hideDeleteDialog = () => setDeleteVisible(false);
+
+  const handleDeleteAccount = () => {
+    // Add account deletion logic here
+    deleteAccount(userID).then((response) => {
+      removeAllDataFromAsyncStorage();
+              setTimeout(() => {
+                navigation.replace(
+                  "SplashScreen"
+                )
+              }, 1000);
+              hideDeleteDialog();
+    });
+
+    hideDeleteDialog();
+  };
 
   return (
-    <SafeAreaView  style={{ flex: 1,backgroundColor:"#fff",paddingTop:8}}>
-      <ImageBackground
-        resizeMode='contain'
-        style={{height:70,width:`100%`}}
-        source={require('../../../assets/heeaderProofile.png')}>
-<TouchableOpacity 
-        style={{position:"absolute",top:0,left:0,width:130,height:90}}
-        onPress={()=>{navigation.goBack()}}>
+    <SafeAreaView style={{flex: 1, backgroundColor: "#fff"}}>
+    <ImageBackground
+      resizeMode='contain'
+      style={styles.header}
+      source={require('../../../assets/heeaderProofile.png')}>
+      <TouchableOpacity 
+        style={styles.backButton}
+        onPress={() => navigation.goBack()}
+      />
+    </ImageBackground>
 
-        </TouchableOpacity>
-        </ImageBackground>
-      
-    <Block safe marginTop={sizes.md} style={{backgroundColor:"#fff"}}>
+    <Block safe marginTop={sizes.md} style={{backgroundColor: "#fff"}}>
       <Block
         scroll
         paddingHorizontal={sizes.s}
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={{paddingBottom: sizes.padding,backgroundColor:"#fff"}}>
-        <Block flex={0}>
-        <View style={{backgroundColor:"#fff",
-          paddingTop:15,
-          paddingBottom:15,
-          borderRadius:8,
-          margin:15
-        }}>
-          
-            <Block flex={0} align="center">
-              <Image
-                width={64}
-                height={64}
-                marginBottom={sizes.sm}
-                source={{uri: dataUser?.avatarUrl}}
-              />
-              <Text h5 center black>
-                {dataUser?.fullName}
-              </Text>
-              <Text p center black>
-                {dataUser?.teamName}
-              </Text>
-              <Block row marginVertical={sizes.m}>
-                {/* <ButtonPro
-                  black
-                  outlined
-                  shadow={false}
-                  radius={sizes.m}
-                  >
-                  <Block
-                    justify="center"
-                    radius={sizes.m}
-                    paddingHorizontal={sizes.m}
-                    >
-                    <Text black bold transform="uppercase">
-                    {"Point: "+dataUser?.totalPoint}
-                    </Text>
-                  </Block>
-                </ButtonPro> */}
-                <TouchableOpacity   onPress={()=>{
-
-               }} style={{position:"absolute",right:-20,top:10}}>
-                <IconA
-            name="logout"
-            size={38}
-            color={Colors.platform.android.primary}
-            onPress={()=>{showLogoutDialog()
-               }}
-          />
-                </TouchableOpacity>
+        contentContainerStyle={{paddingBottom: sizes.padding}}>
+        
+        {/* User Profile Card */}
+        <View style={styles.profileCard}>
+          <Block flex={0} align="center">
+            <Image
+              width={80}
+              height={80}
+              marginBottom={sizes.sm}
+              source={{uri: dataUser?.avatarUrl}}
+              style={styles.avatar}
+            />
+            <Text h4 center bold style={styles.userName}>{dataUser?.fullName}</Text>
+            <Text p center style={styles.teamName}>{dataUser?.teamName}</Text>
+            
+            <View style={styles.actionButtons}>
+              <TouchableOpacity 
+                style={styles.iconButton}
+                onPress={showLogoutDialog}>
+                <IconA name="logout" size={28} color={colors.primary} />
+              </TouchableOpacity>
               
-                
-              </Block>
-              
-            </Block>
+              <TouchableOpacity 
+                style={styles.iconButton}
+                onPress={showDeleteDialog}>
+                <IconA name="delete" size={28} color={colors.danger} />
+              </TouchableOpacity>
             </View>
+          </Block>
+        </View>
 
-          
-        </Block>
+        {/* Ranking List */}
         {renderListCards()}
       </Block>
-      
     </Block>
+
+    {/* Logout Dialog */}
     <Portal>
-        <Dialog visible={logoutVisible} onDismiss={hideLogoutDialog}>
-          <Dialog.Title>Logout</Dialog.Title>
-          <Dialog.Content>
-            <Paragraph>Are you sure you want to log out?</Paragraph>
-          </Dialog.Content>
-          <Dialog.Actions>
-            <Button onPress={hideLogoutDialog} title="Cancel" />
-            <Button onPress={handleLogout} title="Accept" />
-          </Dialog.Actions>
-        </Dialog>
-      </Portal>
-    </SafeAreaView>
+      <Dialog visible={logoutVisible} onDismiss={hideLogoutDialog} style={styles.dialog}>
+        <Dialog.Title style={styles.dialogTitle}>Confirm Logout</Dialog.Title>
+        <Dialog.Content>
+          <Paragraph style={styles.dialogText}>Are you sure you want to log out?</Paragraph>
+        </Dialog.Content>
+        <Dialog.Actions style={styles.dialogActions}>
+          <TouchableOpacity onPress={hideLogoutDialog} style={styles.dialogButton}>
+            <Text style={styles.cancelText}>Cancel</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={handleLogout} style={[styles.dialogButton, styles.confirmButton]}>
+            <Text style={styles.confirmText}>Log Out</Text>
+          </TouchableOpacity>
+        </Dialog.Actions>
+      </Dialog>
+    </Portal>
+
+    {/* Delete Account Dialog */}
+    <Portal>
+      <Dialog visible={deleteVisible} onDismiss={hideDeleteDialog} style={styles.dialog}>
+        <Dialog.Title style={styles.dialogTitle}>Delete Account</Dialog.Title>
+        <Dialog.Content>
+          <Paragraph style={styles.dialogText}>Are you sure you want to delete your account? This action cannot be undone.</Paragraph>
+        </Dialog.Content>
+        <Dialog.Actions style={styles.dialogActions}>
+          <TouchableOpacity onPress={hideDeleteDialog} style={styles.dialogButton}>
+            <Text style={styles.cancelText}>Cancel</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={handleDeleteAccount} style={[styles.dialogButton, styles.deleteButton]}>
+            <Text style={styles.deleteText}>Delete</Text>
+          </TouchableOpacity>
+        </Dialog.Actions>
+      </Dialog>
+    </Portal>
+  </SafeAreaView>
   );
 };
-
+const styles = StyleSheet.create({
+  header: {
+    height: 70,
+    width: '100%'
+  },
+  backButton: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    width: 130,
+    height: 90
+  },
+  profileCard: {
+    backgroundColor: "#fff",
+    padding: 20,
+    borderRadius: 16,
+    margin: 16,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 4
+  },
+  avatar: {
+    borderRadius: 40,
+    borderWidth: 2,
+    borderColor: '#fff'
+  },
+  userName: {
+    marginTop: 8,
+    color: '#2D3748',
+    letterSpacing: 0.5
+  },
+  teamName: {
+    color: '#718096',
+    marginBottom: 16
+  },
+  actionButtons: {
+    flexDirection: 'row',
+    gap: 16,
+    marginTop: 8
+  },
+  iconButton: {
+    padding: 8,
+    borderRadius: 8,
+    backgroundColor: '#F7FAFC'
+  },
+  dialog: {
+    borderRadius: 16,
+    padding: 8
+  },
+  dialogTitle: {
+    color: '#2D3748',
+    fontWeight: '600'
+  },
+  dialogText: {
+    color: '#718096',
+    lineHeight: 24
+  },
+  dialogActions: {
+    marginTop: 16,
+    flexDirection: 'row',
+    justifyContent: 'flex-end'
+  },
+  dialogButton: {
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 8
+  },
+  confirmButton: {
+    backgroundColor: '#4299E1'
+  },
+  deleteButton: {
+    backgroundColor: '#FEB2B2'
+  },
+  cancelText: {
+    color: '#718096',
+    fontWeight: '500'
+  },
+  confirmText: {
+    color: '#fff',
+    fontWeight: '600'
+  },
+  deleteText: {
+    color: '#C53030',
+    fontWeight: '600'
+  }
+});
 export default Profile;

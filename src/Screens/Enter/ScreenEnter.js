@@ -244,6 +244,34 @@ export default function ScreenEnter({ navigation }) {
       </>
     );
   };
+  const GoogleSignInButtonEmailRegisterWitout = ({ onPress }) => {
+    return (
+      <>
+        <Button
+          mode=""
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            backgroundColor: Colors.green400, // Google's brand color
+            padding: 10,
+            justifyContent: "space-around",
+          }}
+          onPress={() => navigation.replace("Tabs")}
+        >
+          <Icon
+            name="file-text-o"
+            size={25}
+            color="white"
+            style={{ marginRight: 10 }}
+          />
+          <View style={{ width: 20 }} />
+          <Text style={{ color: "white", fontWeight: "bold",fontFamily:"Poppins-Black" }}>
+            Go To App
+          </Text>
+        </Button>
+      </>
+    );
+  };
 
   return (
     <KeyboardAvoidingView
@@ -306,6 +334,7 @@ export default function ScreenEnter({ navigation }) {
       
       />
       <GoogleSignInButtonEmailRegister />
+      <GoogleSignInButtonEmailRegisterWitout />
 
       {/* Adjust size and color as needed */}
 

@@ -799,7 +799,13 @@
                             {/* <Text style={{ color: "#fff", fontWeight: 'black',fontFamily:"Poppins-Black" }}>{"Commentator"}</Text> */}
                           </TouchableOpacity>
                           <TouchableOpacity
-                            onPress={() => {
+                            onPress={async () => {
+                              const token = await AsyncStorage.getItem('token');
+          if(token == null){
+            navigation.navigate("Onbordeing");
+
+            return;
+          }
                               navigation.navigate("Profile");
                             }}
                           >
@@ -839,7 +845,13 @@
                             style={{ width: 50, height: 50 }}
                           />
                           <TouchableOpacity
-                            onPress={() => {
+                            onPress={async () => {
+                              const token = await AsyncStorage.getItem('token');
+          if(token == null){
+            navigation.navigate("Onbordeing");
+
+            return;
+          }
                               navigation.navigate("Profile");
                             }}
                           >
